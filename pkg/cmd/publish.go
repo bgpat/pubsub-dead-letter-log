@@ -14,8 +14,9 @@ import (
 )
 
 var publishOption = struct {
-	project string
-	topic   string
+	project    string
+	topic      string
+	attributes map[string]string
 }{}
 
 func newPublishCommand() *cobra.Command {
@@ -52,9 +53,15 @@ func newPublishCommand() *cobra.Command {
 				if err != nil {
 					return errors.WithStack(err)
 				}
+
+				attributes := log.Message.Attributes
+				for k, v := range publishOption.attributes {
+					attributes[k] = v
+				}
+
 				result := p.Publish(ctx, &pubsub.Message{
 					Data:       log.Message.Data,
-					Attributes: log.Message.Attributes,
+					Attributes: attributes,
 				})
 				id, err := result.Get(ctx)
 				if err != nil {
@@ -67,5 +74,6 @@ func newPublishCommand() *cobra.Command {
 	}
 	c.Flags().StringVar(&publishOption.project, "project", "", "pubsub project name. If not set, publish to the original project described in the dead-letter log.")
 	c.Flags().StringVar(&publishOption.topic, "topic", "", "pubsub topic name. If not set, publish to the original topic described in the dead-letter log.")
+	c.Flags().StringToStringVarP(&publishOption.attributes, "attribute", "a", nil, "overwrite attributes")
 	return &c
 }

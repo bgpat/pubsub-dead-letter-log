@@ -9,6 +9,7 @@ func New() *cobra.Command {
 	}
 	c.AddCommand(
 		newVersionCommand(),
+		newListCommand(),
 		newPublishCommand(),
 	)
 	return &c

@@ -15,10 +15,11 @@ import (
 
 func newListCommand() *cobra.Command {
 	c := cobra.Command{
-		Use:          "list",
-		Short:        "list log files from URL",
-		SilenceUsage: true,
-		RunE: func(_ *cobra.Command, args []string) error {
+		Use:   "list <url> ...",
+		Short: "list log files from URL",
+		Args:  cobra.MinimumNArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cmd.SilenceUsage = true
 			ctx := context.Background()
 			var logs []psdll.DeadLetterLog
 			for _, arg := range args {

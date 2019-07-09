@@ -15,7 +15,7 @@ import (
 
 func newListCommand() *cobra.Command {
 	c := cobra.Command{
-		Use:   "list",
+		Use:   "list <url> ...",
 		Short: "list log files from URL",
 		Args:  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

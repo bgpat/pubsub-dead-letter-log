@@ -21,7 +21,7 @@ var publishOption = struct {
 
 func newPublishCommand() *cobra.Command {
 	c := cobra.Command{
-		Use:   "publish",
+		Use:   "publish <url> ...",
 		Short: "publish messages to Google Cloud Pub/Sub",
 		Args:  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

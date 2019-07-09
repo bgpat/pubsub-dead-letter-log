@@ -21,10 +21,11 @@ var publishOption = struct {
 
 func newPublishCommand() *cobra.Command {
 	c := cobra.Command{
-		Use:          "publish",
-		Short:        "publish messages to Google Cloud Pub/Sub",
-		SilenceUsage: true,
-		RunE: func(_ *cobra.Command, args []string) error {
+		Use:   "publish",
+		Short: "publish messages to Google Cloud Pub/Sub",
+		Args:  cobra.MinimumNArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			cmd.SilenceUsage = true
 			ctx := context.Background()
 			var logs []psdll.DeadLetterLog
 			for _, arg := range args {

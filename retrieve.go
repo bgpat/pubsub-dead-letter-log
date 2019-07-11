@@ -14,7 +14,7 @@ import (
 )
 
 // ReadFromURL returns dead-letter-log files from present URL.
-func ReadFromURL(ctx context.Context, uri string) ([]DeadLetterLog, error) {
+func ReadFromURL(ctx context.Context, uri string) (map[string]DeadLetterLog, error) {
 	bucket, files, err := retrieveFiles(ctx, uri)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to retrive %q", uri)
@@ -24,7 +24,7 @@ func ReadFromURL(ctx context.Context, uri string) ([]DeadLetterLog, error) {
 			fmt.Fprintln(os.Stderr, err)
 		}
 	}()
-	var logs []DeadLetterLog
+	logs := make(map[string]DeadLetterLog)
 	for _, file := range files {
 		b, err := bucket.ReadAll(ctx, file)
 		if err != nil {
@@ -34,7 +34,7 @@ func ReadFromURL(ctx context.Context, uri string) ([]DeadLetterLog, error) {
 		if err := json.Unmarshal(b, &log); err != nil {
 			return nil, errors.Wrapf(err, "%q is not a JSON file", file)
 		}
-		logs = append(logs, log)
+		logs[file] = log
 	}
 	return logs, nil
 }

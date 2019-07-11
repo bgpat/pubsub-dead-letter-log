@@ -9,7 +9,7 @@ import (
 
 var (
 	appName = "file2pubsub"
-	version = "v0.0.0"
+	version = "v0.1.0"
 )
 
 func newVersionCommand() *cobra.Command {

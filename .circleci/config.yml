@@ -88,7 +88,6 @@ workflows:
 
       - homebrew/update:
           <<: *filter-release
-          formula: psdll
           context: tool-releasing
           requires:
             - github-release/create

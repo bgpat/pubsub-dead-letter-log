@@ -1,0 +1,93 @@
+version: 2.1
+
+orbs:
+  go-module: timakin/go-module@0.3.0
+  go-crossbuild: izumin5210/go-crossbuild@0.1.1
+  github-release: izumin5210/github-release@0.1.1
+  homebrew: izumin5210/homebrew@0.1.1
+  inline: izumin5210/inline@0.1.0
+
+executors:
+  golang:
+    parameters:
+      version:
+        type: string
+    docker:
+      - image: circleci/golang:<< parameters.version >>
+    environment:
+      - GO111MODULE: "on"
+
+aliases:
+  go1.11: &go-1-11
+    executor:
+      name: golang
+      version: '1.11'
+  go1.12: &go-1-12
+    executor:
+      name: golang
+      version: '1.12'
+  filter-all: &filter-all
+    filters:
+      tags:
+        only: /.*/
+  filter-release: &filter-release
+    filters:
+      branches:
+        ignore: /.*/
+      tags:
+        only: /^v\d+\.\d+\.\d+$/
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - go-module/download: &setup-base
+          <<: *filter-all
+          <<: *go-1-12
+          name: 'setup-1.12'
+          persist-to-workspace: true
+          vendoring: true
+
+      - go-module/download:
+          <<: *go-1-11
+          <<: *setup-base
+          name: 'setup-1.11'
+
+      - inline/steps:
+          <<: *go-1-12
+          name: 'test-1.12'
+          steps:
+            - run: go test -coverpkg ./... -coverprofile coverage.txt -covermode atomic -race -v ./...
+            - run: bash <(curl -s https://codecov.io/bash)
+          requires:
+            - setup-1.12
+
+      - inline/steps:
+          <<: *go-1-11
+          name: 'test-1.11'
+          steps:
+            - run: go test -race -v ./...
+          requires:
+            - setup-1.11
+
+      - go-crossbuild/build:
+          <<: *filter-all
+          <<: *go-1-12
+          app-name: psdll
+          packages: ./cmd/psdll
+          requires:
+            - setup-1.12
+
+      - github-release/create:
+          <<: *filter-release
+          context: tool-releasing
+          requires:
+            - test-1.12
+            - test-1.11
+            - go-crossbuild/build
+
+      - homebrew/update:
+          <<: *filter-release
+          context: tool-releasing
+          requires:
+            - github-release/create

@@ -33,7 +33,9 @@ func newPublishCommand() *cobra.Command {
 				if err != nil {
 					return errors.Wrapf(err, "invalid URL: %q", arg)
 				}
-				logs = append(logs, l...)
+				for _, log := range l {
+					logs = append(logs, log)
+				}
 			}
 			sort.Slice(logs, func(i, j int) bool {
 				return logs[i].Timestamp.Before(logs[j].Timestamp)

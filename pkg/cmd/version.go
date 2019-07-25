@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	appName = "file2pubsub"
-	version = "v0.1.0"
+	appName = "psdll"
+	version = "v0.1.3"
 )
 
 func newVersionCommand() *cobra.Command {

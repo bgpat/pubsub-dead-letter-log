@@ -1,6 +1,6 @@
 # pubsub-dead-letter-log
 
-[![CircleCI](https://circleci.com/gh/wantedly/pubsub-dead-letter-log/tree/master.svg?style=svg)](https://circleci.com/gh/wantedly/pubsub-dead-letter-log/tree/master)
+[![CircleCI](https://circleci.com/gh/wantedly/psdll/tree/master.svg?style=svg)](https://circleci.com/gh/wantedly/psdll/tree/master)
 
 `psdll` is the CLI tool to list/re-publish **p**ub**s**ub **d**ead-**l**etter **l**og.
 
@@ -27,17 +27,17 @@ _pubsub dead-letter log_ is the fail log for publishing the pubsub message.
 #### macOS
 
 ```bash
-brew install wantedly/tap/pubsub-dead-letter-log
+brew install wantedly/tap/psdll
 ```
 
 #### other platform
 
-You can download prebuilt binaries for each platform in the [releases](https://github.com/wantedly/pubsub-dead-letter-log/releases) page.
+You can download prebuilt binaries for each platform in the [releases](https://github.com/wantedly/psdll/releases) page.
 
 #### build from source
 
 ```bash
-go get -u github.com/wantedly/pubsub-dead-letter-log/cmd/psdll
+go get -u github.com/wantedly/psdll/cmd/psdll
 ```
 
 ### List logs

@@ -7,7 +7,7 @@ import (
 	_ "gocloud.dev/blob/gcsblob"
 	_ "gocloud.dev/blob/s3blob"
 
-	"github.com/wantedly/pubsub-dead-letter-log/pkg/cmd"
+	"github.com/wantedly/psdll/pkg/cmd"
 )
 
 func main() {

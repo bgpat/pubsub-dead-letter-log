@@ -9,8 +9,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
-	"github.com/wantedly/pubsub-dead-letter-log"
-	"github.com/wantedly/pubsub-dead-letter-log/pkg/publisher"
+	"github.com/wantedly/psdll"
+	"github.com/wantedly/psdll/pkg/publisher"
 )
 
 var publishOption = struct {

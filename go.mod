@@ -1,4 +1,4 @@
-module github.com/wantedly/pubsub-dead-letter-log
+module github.com/wantedly/psdll
 
 go 1.12
 

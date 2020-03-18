@@ -3,7 +3,7 @@ module github.com/wantedly/psdll
 go 1.12
 
 require (
-	cloud.google.com/go v0.39.0
+	cloud.google.com/go v0.55.0
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/olekukonko/tablewriter v0.0.4

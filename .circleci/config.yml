@@ -18,14 +18,14 @@ executors:
       - GO111MODULE: "on"
 
 aliases:
-  go1.11: &go-1-11
+  go1.13: &go-1-13
     executor:
       name: golang
-      version: '1.11'
-  go1.12: &go-1-12
+      version: '1.13'
+  go1.14: &go-1-14
     executor:
       name: golang
-      version: '1.12'
+      version: '1.14'
   filter-all: &filter-all
     filters:
       tags:
@@ -43,47 +43,47 @@ workflows:
     jobs:
       - go-module/download: &setup-base
           <<: *filter-all
-          <<: *go-1-12
-          name: 'setup-1.12'
+          <<: *go-1-14
+          name: 'setup-1.14'
           persist-to-workspace: true
           vendoring: true
 
       - go-module/download:
-          <<: *go-1-11
+          <<: *go-1-13
           <<: *setup-base
-          name: 'setup-1.11'
+          name: 'setup-1.13'
 
       - inline/steps:
-          <<: *go-1-12
-          name: 'test-1.12'
+          <<: *go-1-14
+          name: 'test-1.14'
           steps:
             - run: go test -coverpkg ./... -coverprofile coverage.txt -covermode atomic -race -v ./...
             - run: bash <(curl -s https://codecov.io/bash)
           requires:
-            - setup-1.12
+            - setup-1.14
 
       - inline/steps:
-          <<: *go-1-11
-          name: 'test-1.11'
+          <<: *go-1-13
+          name: 'test-1.13'
           steps:
             - run: go test -race -v ./...
           requires:
-            - setup-1.11
+            - setup-1.13
 
       - go-crossbuild/build:
           <<: *filter-all
-          <<: *go-1-12
+          <<: *go-1-14
           app-name: psdll
           packages: ./cmd/psdll
           requires:
-            - setup-1.12
+            - setup-1.14
 
       - github-release/create:
           <<: *filter-release
           context: tool-releasing
           requires:
-            - test-1.12
-            - test-1.11
+            - test-1.14
+            - test-1.13
             - go-crossbuild/build
 
       - homebrew/update:
